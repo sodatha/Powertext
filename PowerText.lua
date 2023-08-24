@@ -1,7 +1,6 @@
 local PowerTextFrame = CreateFrame("Frame", "PowerTextFrame", UIParent)
 PowerTextFrame:SetWidth(120) 
 PowerTextFrame:SetHeight(42) 
-
 PowerTextFrame:SetMovable(true)
 PowerTextFrame:EnableMouse(true)
 PowerTextFrame:RegisterForDrag("LeftButton")
@@ -21,47 +20,51 @@ PowerTextFrame:Show()
 
 PowerTextFrame:SetScript("OnLoad", PowerText_EventFrame_OnLoad)
 
-
-function PowerText_EventFrame_OnEvent() 	
-	if event == "VARIABLES_LOADED" then
-		this:UnregisterEvent("VARIABLES_LOADED")		
-		PowerText_Initialize()		
-		PowerText_UpdateText()		
-		PowerText_DisplayMessage("vl")
-	elseif event == "UNIT_MANA" or event == "UNIT_ENERGY" or event == "UNIT_RAGE" then		
-		PowerText_UpdateText()
-	elseif event == "UNIT_ATTACK_POWER" then		
-		PowerText_UpdateText()
-	end
-	
+function PowerText_DisplayMessage(message, r, g, b)
+	if r == nil then
+		DEFAULT_CHAT_FRAME:AddMessage(message, 0.53, 0.53, 0.93) 
+	else
+		DEFAULT_CHAT_FRAME:AddMessage(message, r, g, b) 
+	end		
 end
 
-function PowerText_UpdateText()
-	local base, posBuff, negBuff = UnitAttackPower("player");
-	local effective = base + posBuff + negBuff;
-	local mana = UnitMana("player").." / "..UnitManaMax("player")
-	PowerTextFrame.text:SetText(effective.." AP\n"..mana)		
-end
-PowerTextFrame:SetScript('OnEvent', function()
-    --PowerText_DisplayMessage(event)
-    PowerText_EventFrame_OnEvent()
-end)
-PowerTextFrame:RegisterEvent("VARIABLES_LOADED")
-PowerTextFrame:RegisterEvent("UNIT_MANA")	
-PowerTextFrame:RegisterEvent("UNIT_ENERGY")	
-PowerTextFrame:RegisterEvent("UNIT_RAGE")	
-PowerTextFrame:RegisterEvent("UNIT_ATTACK_POWER")	
-
-function PowerText_EventFrame_OnLoad()	
-	
+function PowerText_EventFrame_OnLoad()		
 end
 
-function PowerText_Initialize()
+function PowerText_Initialize()	
 	PowerTextFrame.text = PowerTextFrame:CreateFontString(nil,"ARTWORK") 
 	PowerTextFrame.text:SetFont("Fonts\\ARIALN.ttf", 230, "OUTLINE")
 	PowerTextFrame.text:SetPoint("CENTER",0,0)
 	PowerTextFrame.text:SetTextHeight(20)				
 end
+
+function PowerText_UpdateText()	
+	local base, posBuff, negBuff = UnitAttackPower("player");		
+	local effective = base + posBuff + negBuff;
+	local mana = UnitMana("player").." / "..UnitManaMax("player")
+	PowerTextFrame.text:SetText(effective.." AP\n"..mana)		
+end
+
+function PowerText_EventFrame_OnEvent() 	
+	if event == "PLAYER_ENTERING_WORLD" then		
+		PowerText_Initialize()	
+		PowerText_UpdateText()				
+	elseif event == "UNIT_MANA" or event == "UNIT_ENERGY" or event == "UNIT_RAGE" then		
+		PowerText_UpdateText()
+	elseif event == "UNIT_ATTACK_POWER" then		
+		PowerText_UpdateText()
+	end	
+end
+
+PowerTextFrame:SetScript('OnEvent', function()    
+    PowerText_EventFrame_OnEvent()
+end)
+
+PowerTextFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+PowerTextFrame:RegisterEvent("UNIT_MANA")	
+PowerTextFrame:RegisterEvent("UNIT_ENERGY")	
+PowerTextFrame:RegisterEvent("UNIT_RAGE")	
+PowerTextFrame:RegisterEvent("UNIT_ATTACK_POWER")	
 
 function PowerText_Toggle()
 	if PowerTextFrame:IsVisible() then
@@ -71,11 +74,5 @@ function PowerText_Toggle()
 	end
 end
 
-function PowerText_DisplayMessage(message, r, g, b)
-	if r == nil then
-		DEFAULT_CHAT_FRAME:AddMessage(message, 0.53, 0.53, 0.93) 
-	else
-		DEFAULT_CHAT_FRAME:AddMessage(message, r, g, b) 
-	end		
-end
+
 
