@@ -1,0 +1,7 @@
+## Title: PowerText
+## Notes: Simple Class Power Display
+## Version: 1.0.0
+## Author: Sodatha in Turtle Wow
+## Interface: 11200
+## SavedVariables: PowerTextOptions
+PowerText.lua
