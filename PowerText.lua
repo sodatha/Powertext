@@ -1,11 +1,3 @@
-PowerTextOptionsDefaults = {
-	Width = 128,
-	Height = 32,
-	X = 0,
-	Y = 0,
-}
-
-
 local PowerTextFrame = CreateFrame("Frame", "PowerTextFrame", UIParent)
 PowerTextFrame:SetWidth(120) 
 PowerTextFrame:SetHeight(42) 
@@ -22,6 +14,7 @@ PowerTextFrame:SetBackdrop({
 	edgeSize = 8,
 	insets = { left = 4, right = 4, top = 4, bottom = 4 },
 })
+
 PowerTextFrame:SetBackdropColor(0, 0, 1, .3)
 
 PowerTextFrame:SetPoint("CENTER", 0, 0)
