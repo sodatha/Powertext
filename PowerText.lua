@@ -14,7 +14,6 @@ PowerTextFrame:SetBackdrop({
 	edgeSize = 8,
 	insets = { left = 4, right = 4, top = 4, bottom = 4 },
 })
-
 PowerTextFrame:SetBackdropColor(0, 0, 1, .3)
 
 PowerTextFrame:SetPoint("CENTER", 0, 0)
@@ -28,19 +27,19 @@ local function PowerText_EventFrame_OnEvent()
 		this:UnregisterEvent("VARIABLES_LOADED")		
 		PowerText_Initialize()	
 	elseif event == "UNIT_MANA" or event == "UNIT_ENERGY" or event == "UNIT_RAGE" then		
-		local base, posBuff, negBuff = UnitAttackPower("player");
-		local effective = base + posBuff + negBuff;
-		local mana = UnitMana("player").." / "..UnitManaMax("player")
-		PowerTextFrame.text:SetText(effective.." AP\n"..mana)		
+		PowerText_UpdateText()
 	elseif event == "UNIT_ATTACK_POWER" then		
-		local base, posBuff, negBuff = UnitAttackPower("player");
-		local effective = base + posBuff + negBuff;
-		local mana = UnitMana("player").." / "..UnitManaMax("player")
-		PowerTextFrame.text:SetText(effective.." AP\n"..mana)		
+		PowerText_UpdateText()
 	end
 	
 end
 
+local function PowerText_UpdateText()
+	local base, posBuff, negBuff = UnitAttackPower("player");
+	local effective = base + posBuff + negBuff;
+	local mana = UnitMana("player").." / "..UnitManaMax("player")
+	PowerTextFrame.text:SetText(effective.." AP\n"..mana)		
+end
 PowerTextFrame:SetScript('OnEvent', function()
     --PowerText_DisplayMessage(event)
     PowerText_EventFrame_OnEvent()
@@ -60,13 +59,8 @@ function PowerText_Initialize()
 	PowerTextFrame.text = PowerTextFrame:CreateFontString(nil,"ARTWORK") 
 	PowerTextFrame.text:SetFont("Fonts\\ARIALN.ttf", 230, "OUTLINE")
 	PowerTextFrame.text:SetPoint("CENTER",0,0)
-	PowerTextFrame.text:SetTextHeight(20)	
-	--PowerTextFrame.text:SetText(UnitMana("player").." / "..UnitManaMax("player"))
-	
-	local base, posBuff, negBuff = UnitAttackPower("player");
-	local effective = base + posBuff + negBuff;
-	local mana = UnitMana("player").." / "..UnitManaMax("player")
-	PowerTextFrame.text:SetText(effective.." AP\n"..mana)				
+	PowerTextFrame.text:SetTextHeight(20)			
+	PowerText_UpdateText()
 end
 
 function PowerText_Toggle()
