@@ -22,10 +22,12 @@ PowerTextFrame:Show()
 PowerTextFrame:SetScript("OnLoad", PowerText_EventFrame_OnLoad)
 
 
-local function PowerText_EventFrame_OnEvent() 	
+function PowerText_EventFrame_OnEvent() 	
 	if event == "VARIABLES_LOADED" then
 		this:UnregisterEvent("VARIABLES_LOADED")		
-		PowerText_Initialize()	
+		PowerText_Initialize()		
+		PowerText_UpdateText()		
+		PowerText_DisplayMessage("vl")
 	elseif event == "UNIT_MANA" or event == "UNIT_ENERGY" or event == "UNIT_RAGE" then		
 		PowerText_UpdateText()
 	elseif event == "UNIT_ATTACK_POWER" then		
@@ -34,7 +36,7 @@ local function PowerText_EventFrame_OnEvent()
 	
 end
 
-local function PowerText_UpdateText()
+function PowerText_UpdateText()
 	local base, posBuff, negBuff = UnitAttackPower("player");
 	local effective = base + posBuff + negBuff;
 	local mana = UnitMana("player").." / "..UnitManaMax("player")
@@ -45,7 +47,6 @@ PowerTextFrame:SetScript('OnEvent', function()
     PowerText_EventFrame_OnEvent()
 end)
 PowerTextFrame:RegisterEvent("VARIABLES_LOADED")
-PowerTextFrame:RegisterEvent("ADDON_LOADED")
 PowerTextFrame:RegisterEvent("UNIT_MANA")	
 PowerTextFrame:RegisterEvent("UNIT_ENERGY")	
 PowerTextFrame:RegisterEvent("UNIT_RAGE")	
@@ -59,8 +60,7 @@ function PowerText_Initialize()
 	PowerTextFrame.text = PowerTextFrame:CreateFontString(nil,"ARTWORK") 
 	PowerTextFrame.text:SetFont("Fonts\\ARIALN.ttf", 230, "OUTLINE")
 	PowerTextFrame.text:SetPoint("CENTER",0,0)
-	PowerTextFrame.text:SetTextHeight(20)			
-	PowerText_UpdateText()
+	PowerTextFrame.text:SetTextHeight(20)				
 end
 
 function PowerText_Toggle()
